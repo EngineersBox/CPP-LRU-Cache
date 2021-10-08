@@ -1,3 +1,4 @@
+#include "cache_entry.hpp"
 #include <list>
 #include <unordered_map>
 #include <optional>
@@ -6,13 +7,6 @@
 #define __LRU_MAP_LIST_CACHE_H__
 
 namespace LRUCache {
-
-    template<typename K, typename V>
-    struct CacheEntry {
-        const K key;
-        const V value;
-    };
-
     template<typename K, typename V, size_t C>
     class LRUCache_map_list {
         static_assert(C > 0);
