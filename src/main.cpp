@@ -1,8 +1,9 @@
-#include "lru.h"
-#include "lru.cpp"
+#include "lru_array.cpp"
+#include "lru_map_list.cpp"
 #include <iostream>
 #include <random>
 #include <cassert>
+#include <sstream>
 
 inline int randInRange(const int startInc, const int endExc) {
     std::random_device rd;
@@ -11,8 +12,20 @@ inline int randInRange(const int startInc, const int endExc) {
     return distribution(gen);
 }
 
+template<typename K, typename V, size_t C>
+std::string joinEntries(const LRUCache::LRUCache_map_list<K,V,C>& values, const std::string& delimiter) {
+    std::ostringstream returnString;
+    for (auto entry = values.begin(); entry != values.end(); ++entry){
+        returnString << entry->key << " => " << entry->value;
+        if (entry != values.end()) {
+            returnString << delimiter;
+        }
+    }
+    return returnString.str();
+}
+
 int main() {
-    LRUCache::LRU<int,int,8> lru;
+    LRUCache::LRU_array<int,int,8> lru;
 
     lru.reset();
 
@@ -32,4 +45,17 @@ int main() {
         }
     }
     std::cout << "Total hits: " << hits << std::endl;
+
+    LRUCache::LRUCache_map_list<std::string, double, 3> cache;
+
+    cache.insert("London", 8.4);
+    cache.insert("Toronto", 2.5);
+    cache.insert("Sydney", 5.2);
+    std::cout << joinEntries<std::string, double>(cache, ", ") << std::endl;
+    std::cout << "London => " << cache.get("London").value_or(-1) << std::endl;
+    std::cout << joinEntries<std::string, double>(cache, ", ") << std::endl;
+    cache.insert("Tokyo", 9.4);
+    std::cout << joinEntries<std::string, double>(cache, ", ") << std::endl;
+
+    return 0;
 }

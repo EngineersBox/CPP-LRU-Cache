@@ -1,11 +1,11 @@
 #include <array>
 
-#ifndef __LRU_CACHE_H__
-#define __LRU_CACHE_H__
+#ifndef __LRU_ARRAY_CACHE_H__
+#define __LRU_ARRAY_CACHE_H__
 
 namespace LRUCache {
     template<class K, class V, std::size_t N>
-    class LRU {
+    class LRU_array {
     public:
         struct CacheSlot {
             K key;
@@ -17,7 +17,7 @@ namespace LRUCache {
         CacheSlot cache[N];
 
     public:
-        LRU() : index(0) {}
+        LRU_array() : index(0) {}
 
         void reset();
         bool find(const K &key, V &value);
@@ -25,4 +25,4 @@ namespace LRUCache {
     };
 }
 
-#endif // __LRU_CACHE_H__
+#endif // __LRU_ARRAY_CACHE_H__
