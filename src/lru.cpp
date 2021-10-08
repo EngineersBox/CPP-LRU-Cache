@@ -1,5 +1,7 @@
 #include "lru.h"
 
+// Based on an implementation by Unai Landa
+
 constexpr unsigned NIBBLE_SHIFT_TO_DWORD = 0xffffffff;
 
 template<class K, class V, std::size_t N>
