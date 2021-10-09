@@ -33,14 +33,14 @@ int main() {
     int range = 256;
     int hits  = 0;
     for(int i = runs - 1; i >= 0; --i) {
-        int key = randInRange(0, range);
-        int val = -1;
-        if (!lru.find(key,val)) {
+        const int key = randInRange(0, range);
+        std::optional<int> val = lru.get(key);
+        if (!val.has_value()) {
             std::cout << "Key " << key << " not found, inserting" << std::endl;
             lru.insert(key, key);
         } else {
             std::cout << "Key " << key << " found" << std::endl;
-            assert(key == val);
+            assert(key == val.value());
             ++hits;
         }
     }

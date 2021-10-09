@@ -7,9 +7,9 @@
 #define __LRU_MAP_LIST_CACHE_H__
 
 namespace LRUCache {
-    template<typename K, typename V, size_t C>
-    class LRUCache_map_list {
-        static_assert(C > 0);
+    template<typename K, typename V, size_t N>
+    class LRUCache_map_list : public LRUCache::LRU_Cache_Base<K,V> {
+        static_assert(N > 0);
     private:
         using CacheEntries = std::list<CacheEntry<K,V>>;
         CacheEntries entries;
@@ -32,9 +32,11 @@ namespace LRUCache {
             return this->entries.end();
         }
 
-        bool insert(const K& k, const V& v);
-        std::optional<V> get(const K& k);
-        void erase(const K& k);
+        virtual void reset() noexcept;
+        virtual void insert(const K& key, const V& value);
+        virtual std::optional<V> get(const K& key);
+        virtual void erase(const K& key);
+        virtual void clear() noexcept;
     };
 }
 

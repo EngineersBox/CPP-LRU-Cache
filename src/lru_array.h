@@ -1,22 +1,42 @@
 #include "cache_entry.hpp"
+#include "lru_cache_base.hpp"
 #include <array>
+#include <optional>
 
 #ifndef __LRU_ARRAY_CACHE_H__
 #define __LRU_ARRAY_CACHE_H__
 
 namespace LRUCache {
-    template<class K, class V, std::size_t N>
-    class LRU_array {
+    template<typename K, typename V, size_t N>
+    class LRU_array : public LRUCache::LRU_Cache_Base<K,V> {
     private:
-        unsigned index;
-        LRUCache::CacheEntry<K,V> cache[N];
-
+        unsigned index = 0;
+        LRUCache::CacheEntry<K,V>* cache[N];
+        LRUCache::CacheEntry<K,V>* find(const K& key);
     public:
-        LRU_array() : index(0) {}
+        LRU_array() = default;
+        virtual ~LRU_array();
 
-        void reset();
-        bool find(const K &key, V &value);
-        void insert(const K &key, const V &value);
+        using iterator = typename LRUCache::CacheEntry<K, V>*;
+        using const_iterator = typename LRUCache::CacheEntry<K, V>*;
+        iterator begin() noexcept {
+            return std::begin(this->cache);
+        }
+        iterator end() noexcept {
+            return std::end(this->cache);
+        }
+        const_iterator begin() const noexcept {
+            return std::begin(this->cache);
+        }
+        const_iterator end() const noexcept {
+            return std::end(this->cache);
+        }
+
+        virtual void reset() noexcept;
+        virtual void insert(const K& key, const V& value);
+        virtual std::optional<V> get(const K& key);
+        virtual void erase(const K& k);
+        virtual void clear() noexcept;
     };
 }
 
